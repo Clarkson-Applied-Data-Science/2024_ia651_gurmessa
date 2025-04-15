@@ -4,7 +4,7 @@
 
 ## 🦅 Problem Statement
 
-Aircraft wildlife strikes are a major safety concern in aviation. This project predicts the most likely animal species involved in a strike based on factors like flight phase, time of day, location, and altitude.
+Aircraft wildlife strikes are a major safety concern in aviation. This project predicts the most likely animal species involved in a strike based on factors like flight phase, location, and altitude.
 
 ## 📌 Approach
 
@@ -19,5 +19,6 @@ To set up the project, install dependencies using:
 
 ```bash
 pip install -r requirements.txt
+pip install category_encoders
 
 ```
