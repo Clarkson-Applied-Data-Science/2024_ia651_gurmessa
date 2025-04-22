@@ -2,11 +2,18 @@
 __pycache__/
 *.py[cod]
 *$py.class
-
+*.pkl
 # C extensions
 *.so
 #data
 data/raw_database.csv
+model_log_no_pcs.pkl
+model_rand_pca.pkl
+model_rand.pkl
+bird_strike_model.h5
+model.pkl
+pca.pkl
+scaler.pkl
 # Distribution / packaging
 .Python
 build/
