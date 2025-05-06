@@ -138,22 +138,23 @@ Looking at numerical features: Height, aircraft mass and speed underwent scaling
 All catergorical variables were encoded by One-Hot Encoding. 
 
 # Cross features? More advanced encoding / feature engineering you might have completed.
-We did not do any cross features but after going through the models maybe height and speed as they had the highest influence on predicting the target variables. 
+We did not do any cross features but after going through the models maybe height and speed as they had the highest influence on predicting the target variables. The image below has an example of the 
 
 # Model fitting
 # Train / test splitting - How was this performed? How did you decide the train/test sizes?
 I did the standrad 80% training data and 20% testing split, stratisfied by Species Group. The dataset size was sufficient enough to do this. 
 
 # Does your dataset have a risk of data leakage? Describe those risks.
-YES, it does. If we had decided to focus on time like seasons and then had to order it. Another major one was using scaler-imputations before splitting but that is why we only fitted it on the training data ONLY. 
+YES, it does. If we had decided to focus on time like seasons and then had to order it. Another major one was using scale and mean imputations, I used SimpleImputer() before splitting but that is why we only fitted it on the training data ONLY. 
 
 # Which model did you select, why?
-despite having tried 4 models, we went with Random Forest at the end due to its high recall (more important for airplane companies) and auc score and other metrics. 
+Despite having tried 4 models, we went with Random Forest at the end due to its high recall (more important for airplane companies), auc score and other metrics. 
+![alt text](image-6.png)
 
 # Many have tried multiple model types - what is the thought process for trying these types?
 We tried Log Reg at first as a baseline to see the data's linear relationships and other factors. Then we proceed to Linear SVC, worked better for the large dataset with linear patterns but theere was still an issue with distaigusihing betweeb classes especially for known small birds and other smaller groups that made the data heavily imbalanced and why we resorted to SMOTE and decreased granularity in categorical bucketing earlier. From then we jumped a decsion tree to see if Random Forest would do any better and it did, in all aspects and that's why its our frontrunner. For hyper-parameter tuning for optimization, grid search was used. 
 
-# Only use models learned in class (linear regression, logistic regression, SVC/SVM, decision trees (including random forests, etc)
+# Only use models learned in class (linear regression, logistic regression, SVC/SVM, decision trees (including random forests, etc))
 # What was the process for hyper parameter selection if applicable?  
 For hyper-parameter tuning for optimization, grid search was used for log and svc.
 
@@ -161,8 +162,14 @@ For hyper-parameter tuning for optimization, grid search was used for log and sv
 # Which metrics did you weigh most heavily, why? - Accuracy, r^2, balanced accuracy, ROC, AUC, Recall, Precision, etc..
 We used RECALL (Macro Avg) because our class is very imbalanced. AUC for model performances and log-loss helped in measuring how well each model's probabilty outputs matched with real-life. We also had accurancy, precison and others metrics obtrained from the classifiaction report. 
 
+Looking at Macro AUC and micro AUC: 
+In first place we have Random Forest that handles class imbalance while maintaining strong overall performance across all classes. This model strikes the best balance between ranking ability and class-wise discrimination while in runner up is the decision tree that outperforms Logistic Regression; it captures non-linbeararity better by the looks of it. And last is log regression with the lowest macro scores and its mostly due to its struggle to differenraite between classes. 
+![alt text](image-7.png)
+
 # Confusion matrix and confusion discussion for classification problems
-Additionally we used confusion matrixes too. Looking at the different matrices across the different models, there are a few clear takeaways. Random Forest does the best job handling UNKNOWN classes, with high true positive counts for UNKNOWN MEDIUM BIRD and UNKNOWN SMALL BIRD. In contrast, Logistic Regression and SVC struggles significantly with these, often scattering predictions across multiple classes. Rare animals are another challenge—every model misclassifies them frequently, especially into categories like Gulls and Pigeons. This likely points to class imbalance or overlapping features, which might need additional feature engineering or resampling.
+![alt text](image-3.png)
+![alt text](image-4.png)
+Additionally we used confusion matrixes too. Looking at the different matrices across the different models, there are a few clear takeaways. Random Forest does the best job handling UNKNOWN classes, with high true positive counts for UNKNOWN MEDIUM BIRD and UNKNOWN SMALL BIRD. In contrast, Logistic Regression and SVC struggles significantly with these, often scattering predictions across multiple classes. Rare animals are another challenge—every model misclassifies them frequently, especially into categories like Gulls and Pigeons. This likely points to class imbalance or overlapping features, which might need additional feature engineering or resampling. 
 
 Logistic Reg showed the most class confusion overall, with predictions spread too broadly and a lack of clear separations—especially for Gulls & Water Birds. Decision, though better, still overfits and mispredicts them in huge numbers. Random Forest helps mitigate this issue by capturing non-linear patterns more effectively, making it the strongest choice for handling these types of classifications.
 
@@ -176,7 +183,7 @@ The overall concensus is each of these poorly performs on rarer classes and may 
 # Overfitting/Underfitting
 # 1. Identify if model is overfitting or underfitting
 # 2. Identify and apply techniques to mitigate underfitting/overfitting
-Underfitting on minority classes was cleared by SMOTE and/or "weight' = "balanced". 
+The underfitting on minority classes was cleared by SMOTE and/or "weight' = "balanced". 
 
 # Production
 # 1. Give any advice for deployment of use of this model --> Outline precautions about its use here and Going further.
@@ -184,6 +191,7 @@ If there are new bird species or major aircraft design changes that are not in t
 
 # What could make this model better? More data, additional features, more augmentation etc.
 Some kind of Boosting like Gradient Boost would be helpful here and for data, more records of weather conditions wouldve helped. I think knowing bird migration seasons and patterns would help this a lot since State did have some statistical influence. 
+![alt text](image-5.png)
 
 
 
