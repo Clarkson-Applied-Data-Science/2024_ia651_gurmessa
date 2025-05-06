@@ -124,50 +124,67 @@ So we have 359 species each with 16 entries in them.
 # Correlation - are some features strongly correlated?  
 'Aircraft Make', 'Aircraft Model', 'Engine Model', 'Engines', 'Engine Type', 'Engine1 Position', 'State', 'FAA Region', 'Flight Phase', 'Visibility', 'Species Name', 'Engine1 Damage', 'Engine2 Damage', 'Engine3 Damage', 'Engine Ingested', 'Wing or Rotor Damage', 'Tail Damage', 'Lights Damage' are highly correlated. 
 ![alt text](image-2.png)
-# Feature importance.
-Are you using all features for X.  If so, make a case for that.
-If not, make a case for the feature selection you used.
 
+# Feature importance. - Are you using all features for X? If so, make a case for that. If not, make a case for the feature selection you used.
+NO, it wasn’t necessary to  use all of them for our target variable. Features post-impact are not relevant in our pre-incident predictive study. So, I excluded everything post-impact and the damages as well since our primary focus was on the species group. We did perform a PCA but overall, background and non-statistical knowledge was important. 
+
+Features used: 'Species Group', 'Incident Month', 'Flight Phase Cleaned','Aircraft Mass', 'Engine Type Cleaned', 'State', 'Height', 'Speed'
 
 # Feature engineering
 # Which features needed feature engineering?  Discussion:
+Looking at numerical features: Height, aircraft mass and speed underwent scaling and had their missing values handled via median imputation. Then regarding categorical variables they were bucketed: Flight Phase, State, engine type and Species Name was consolidated into broader groups. 
 
+# Label encoding vs. one hot encoding? 
+All catergorical variables were encoded by One-Hot Encoding. 
 
+# Cross features? More advanced encoding / feature engineering you might have completed.
+We did not do any cross features but after going through the models maybe height and speed as they had the highest influence on predicting the target variables. 
 
-
-# Label encoding vs. one hot encoding
-
-
-
-# Cross features
-# More advanced encoding / feature engineering you might have completed.
 # Model fitting
-# Train / test splitting
-How was this performed? How did you decide the train/test sizes?
+# Train / test splitting - How was this performed? How did you decide the train/test sizes?
+I did the standrad 80% training data and 20% testing split, stratisfied by Species Group. The dataset size was sufficient enough to do this. 
+
 # Does your dataset have a risk of data leakage? Describe those risks.
-This is usually true for time series datasets
+YES, it does. If we had decided to focus on time like seasons and then had to order it. Another major one was using scaler-imputations before splitting but that is why we only fitted it on the training data ONLY. 
+
 # Which model did you select, why?
+despite having tried 4 models, we went with Random Forest at the end due to its high recall (more important for airplane companies) and auc score and other metrics. 
+
 # Many have tried multiple model types - what is the thought process for trying these types?
+We tried Log Reg at first as a baseline to see the data's linear relationships and other factors. Then we proceed to Linear SVC, worked better for the large dataset with linear patterns but theere was still an issue with distaigusihing betweeb classes especially for known small birds and other smaller groups that made the data heavily imbalanced and why we resorted to SMOTE and decreased granularity in categorical bucketing earlier. From then we jumped a decsion tree to see if Random Forest would do any better and it did, in all aspects and that's why its our frontrunner. For hyper-parameter tuning for optimization, grid search was used. 
+
 # Only use models learned in class (linear regression, logistic regression, SVC/SVM, decision trees (including random forests, etc)
-# What was the process for hyper parameter selection if applicable.  
-Any processes for searching for hyperparameters or ensemble approaches (e.g. cross fold validation, Gridsearch) should be outlined here.
-Validation / metrics
-# Which metrics did you weigh most heavily, why?
-Accuracy, r^2, balanced accuracy, ROC, AUC, Recall, Precision, etc..
-We used Recall because our class is very imbalanced. 
+# What was the process for hyper parameter selection if applicable?  
+For hyper-parameter tuning for optimization, grid search was used for log and svc.
+
+# Validation / metrics
+# Which metrics did you weigh most heavily, why? - Accuracy, r^2, balanced accuracy, ROC, AUC, Recall, Precision, etc..
+We used RECALL (Macro Avg) because our class is very imbalanced. AUC for model performances and log-loss helped in measuring how well each model's probabilty outputs matched with real-life. We also had accurancy, precison and others metrics obtrained from the classifiaction report. 
 
 # Confusion matrix and confusion discussion for classification problems
+Additionally we used confusion matrixes too. Looking at the different matrices across the different models, there are a few clear takeaways. Random Forest does the best job handling UNKNOWN classes, with high true positive counts for UNKNOWN MEDIUM BIRD and UNKNOWN SMALL BIRD. In contrast, Logistic Regression and SVC struggles significantly with these, often scattering predictions across multiple classes. Rare animals are another challenge—every model misclassifies them frequently, especially into categories like Gulls and Pigeons. This likely points to class imbalance or overlapping features, which might need additional feature engineering or resampling.
+
+Logistic Reg showed the most class confusion overall, with predictions spread too broadly and a lack of clear separations—especially for Gulls & Water Birds. Decision, though better, still overfits and mispredicts them in huge numbers. Random Forest helps mitigate this issue by capturing non-linear patterns more effectively, making it the strongest choice for handling these types of classifications.
+
+One trend across all the models is the high confusion between visually similar bird types, like Swallows & Swifts, Small Land Birds, and Raptors. These misclassifications make sense given real-world similarities in size, flight patterns, and habitat. If interpretability is a priority, grouping certain species or extracting more distinguishing features could improve accuracy. While Random Forest comes out better, refining class definitions and balancing dataset representation will be key for future improvements.
 
 # Highlight model weaknesses
 # Give 2-4 prediction examples from your data.
 # Give 2 prediction examples which are new or synthesized. 
+The overall concensus is each of these poorly performs on rarer classes and may over-relies on height and scv on speed. So more weight on numerical features than contextual ones. 
+
 # Overfitting/Underfitting
-# Identify if model is overfitting or underfitting
-# Identify and apply techniques to mitigate underfitting/overfitting
-Production
-Give any advice for deployment of use of this model
-Outline precautions about its use here
-Going further
-# What could make this model better?
-# More data, additional features, more augmentation etc.
+# 1. Identify if model is overfitting or underfitting
+# 2. Identify and apply techniques to mitigate underfitting/overfitting
+Underfitting on minority classes was cleared by SMOTE and/or "weight' = "balanced". 
+
+# Production
+# 1. Give any advice for deployment of use of this model --> Outline precautions about its use here and Going further.
+If there are new bird species or major aircraft design changes that are not in training, this will cause a problem so this must be monitored. 
+
+# What could make this model better? More data, additional features, more augmentation etc.
+Some kind of Boosting like Gradient Boost would be helpful here and for data, more records of weather conditions wouldve helped. I think knowing bird migration seasons and patterns would help this a lot since State did have some statistical influence. 
+
+
+
 
