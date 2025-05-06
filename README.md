@@ -129,7 +129,14 @@ Are you using all features for X.  If so, make a case for that.
 If not, make a case for the feature selection you used.
 Feature engineering
 # Which features needed feature engineering?  Discussion:
+
+
+
+
 # Label encoding vs. one hot encoding
+
+
+
 # Cross features
 # More advanced encoding / feature engineering you might have completed.
 # Model fitting
