@@ -217,7 +217,6 @@ To see the corelation of the features we have used cramers for categorical and c
 
 ![alt text](merged_correlation.png)
 
-
 ### Which features needed feature engineering?
 
 All these needed Imputation 'Aircraft Type', 'Aircraft Make', 'Aircraft Model', 'Aircraft Mass',
@@ -283,14 +282,13 @@ Neural network
 ![alt text](NeuralNetworks_confusion.png)
 ![alt text](NeuralNetworks_metrics.png)
 
-|                             | Accuracy | Accuracy | Is it       |                 |
-| Model                       | Train    | Test     | Overfitting | Choosen because |
-| --------------------------  | -------- | -------- | ----------- |
-| Logistics                   | 0.4019   | 0.1945   | Yes         | Simple model
-| SVC(sampled hyperparameter) | 0.6047   | 0.3176   | Yes         | Is used for classification
-| Random Forest (Before PCA)  | 0.9999   | 0.4352   | Yes         | Handles overfitting better than decision tree
-| Random Forest (After PCA)   | 0.5593   | 0.3093   | Yes         | Handles overfitting better than decision tree
-| Neural network              | 0.4700   | 0.2654   | Yes         | Works well with large dataset, Can help us handle the overfitting issue even after we tuned parameters in other models
+| Model                        | Accuracy Train | Accuracy Test | Is it Overfitting | Chosen because                                                                |
+| ---------------------------- | -------------- | ------------- | ----------------- | ----------------------------------------------------------------------------- |
+| Logistic Regression          | 0.4019         | 0.1945        | Yes               | Simple model                                                                  |
+| SVC (sampled hyperparameter) | 0.6047         | 0.3176        | Yes               | Used for classification                                                       |
+| Random Forest (Before PCA)   | 0.9999         | 0.4352        | Yes               | Handles overfitting better than decision tree                                 |
+| Random Forest (After PCA)    | 0.5593         | 0.3093        | Yes               | Handles overfitting better than decision tree                                 |
+| Neural Network               | 0.4700         | 0.2654        | Yes               | Works well with large datasets, can help handle overfitting even after tuning |
 
 ### Give 2-4 prediction examples from your data.
 
