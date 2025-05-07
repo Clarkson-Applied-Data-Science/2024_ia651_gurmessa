@@ -3,9 +3,8 @@ import joblib
 import pandas as pd
 import numpy as np
 
-model = joblib.load('model_rand_pca.pkl')
-encoder = joblib.load('encoder.pkl')
-scaler = joblib.load('scaler.pkl')
+model = joblib.load('model_rand_pca.pkl') 
+preprocessor = joblib.load('preprocessor_pipeline.pkl')
 pca = joblib.load('pca.pkl')
 
 df = pd.read_csv("./data/raw_database.csv", dtype={'Flight Phase':'str', 'Visibility':'str',
@@ -14,24 +13,30 @@ df = pd.read_csv("./data/raw_database.csv", dtype={'Flight Phase':'str', 'Visibi
                                                        'Flight Impact': 'str', 'Height':'Int64', 
                                                        'Speed':'float64','Distance':'float64',  
                                                        'Fatalities':'Int64', 'Injuries': 'Int64'}, low_memory=False) 
-features_numeric = ['Fatalities', 'Injuries',
+features_numeric = [
+    
+    'Injuries',
     'Record ID', 'Incident Month', 'Incident Day',
-    'Aircraft Mass',  'Engine2 Position', 
-    'Height', 'Speed', 'Distance',
+    'Aircraft Mass', 'Engine2 Position', 'Height',
     'Aircraft Damage', 'Radome Strike', 'Radome Damage', 'Windshield Strike',
-    'Windshield Damage', 'Nose Strike', 'Nose Damage', 'Engine1 Strike', 
-    'Engine2 Strike',  'Engine3 Strike', 'Engine4 Strike',
-    'Engine4 Damage',  'Propeller Strike', 'Propeller Damage',
+    'Nose Strike', 'Nose Damage',
+    'Engine1 Strike', 'Engine2 Strike', 'Engine3 Strike', 'Engine4 Strike',
+    'Engine4 Damage', 'Propeller Strike', 'Propeller Damage',
     'Wing or Rotor Strike', 'Fuselage Strike', 'Fuselage Damage',
-    'Landing Gear Strike', 'Landing Gear Damage', 'Tail Strike', 
-    'Lights Strike',  'Other Strike', 'Other Damage','Engine Make'
+    'Landing Gear Strike', 'Landing Gear Damage',
+    'Tail Strike', 'Lights Strike', 'Other Strike', 'Other Damage',
+    'Engine Make'  
 ]
+
 feature_string = [
-    'Operator ID', 'Aircraft',  
-      'Species Quantity',  
-    'Engine3 Position', 'Airport ID',  'Warning Issued',
-     'Precipitation', 'Flight Impact'
+    'Operator ID', 'Aircraft',
+    'Species Quantity',
+    'Warning Issued', 'Precipitation',
+    'Flight Impact',
+    'Flight Phase',      
+    'Visibility'    
 ]
+
 
 st.title('Species Prediction App')
 
@@ -41,21 +46,16 @@ for feature in features_numeric:
     input_values[feature] = st.number_input(f"{feature}:", value=1)
 
 for feature in feature_string:
-    unique_values = df[feature].dropna().unique()  # Get unique values for dropdown
+    unique_values = df[feature].dropna().unique() 
     input_values[feature] = st.selectbox(f"Select {feature}:", unique_values)
 
 if st.button('Predict'):
+
     df_input = pd.DataFrame([input_values])
-    X_num = df_input[features_numeric]
-    X_cat = df_input[feature_string]
-
-    st.write("Shape of categorical features:", X_cat.shape)
-    X_cat_encoded = encoder.transform(X_cat)
-    X_combined = np.hstack([X_num.values, X_cat_encoded])
-
-    # Scale + PCA
-    X_combined = scaler.transform(X_combined)
-    X_pca = pca.transform(X_combined)
+    expected_columns = features_numeric + feature_string
+    df_input = df_input[expected_columns]
+    X_preprocessed = preprocessor.transform(df_input)
+    X_pca = pca.transform(X_preprocessed)
     prediction = model.predict(X_pca)
-
     st.success(f"Predicted Species: {prediction[0]}")
+
