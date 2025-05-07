@@ -217,9 +217,6 @@ To see the corelation of the features we have used cramers for categorical and c
 
 ![alt text](merged_correlation.png)
 
-### Feature importance.
-
-![alt text](feature_importance.png)
 
 ### Which features needed feature engineering?
 
